@@ -5,13 +5,13 @@ import ReactDOM from 'react-dom';
 
 import './assets/stylesheets/style.css'
 
-const baseURL = process.env.ENDPOINT;
+const baseURL = "http://195.201.28.135:9000";
 
 /****** ADD YOUR CODE AFTER THIS LINE ******/
 
 const getGreetingFromBackend = async () => {
   try {
-    const url = `${baseURL}/api/greeting`
+    const url = `${baseURL}/api/chats`
     console.log("Getting greeting from "+url)
     const response = await fetch(url);
     return response.json()
@@ -23,7 +23,7 @@ const getGreetingFromBackend = async () => {
 
 
 const BackendGreeting = (props) => (
-  <div><p>Backend says: {props.greeting}</p></div>
+  <div>{props.greeting.map((peruna)=>{return <p>{peruna.message}</p>})}</div>
 );
 
 
@@ -32,17 +32,18 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      greeting: "",
+      greeting: [],
     };
   }
 
   async componentWillMount() {
     const response = await getGreetingFromBackend();
-    this.setState({greeting: response.greeting});
+    console.log(response)
+    this.setState({greeting: response.results});
   }
 
   render() {
-
+    console.log(this.state.greeting)
     return (
       <BackendGreeting greeting={this.state.greeting} />
     );
